@@ -19,6 +19,7 @@ const PASS_HASH = '9884ad64aa0a4e6e006f5dcb35295cd5ad9736979c472fbe6b30649f499ac
 const AUTH_KEY = 'tibo:studio-unlocked'
 
 const SECTIONS = [
+  { key: 'home', label: 'Home page (hero, marquee, stats, CTA)' },
   { key: 'now', label: 'What I do now' },
   { key: 'track', label: 'Experience roles' },
   { key: 'builder', label: 'Projects' },

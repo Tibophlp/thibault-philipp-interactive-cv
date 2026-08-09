@@ -17,8 +17,12 @@
   --color-violet-deep: #343755;
   --color-amber: #f4a13c;
 
+  /* One grotesque for everything, one mono for the technical labels —
+     the pairing that ties the whole site together (Nothing-style). */
   --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-round: 'Quicksand', ui-rounded, 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* Ultra-black display face, hero wordmark only. */
+  --font-display: 'Archivo Black', 'Space Grotesk', system-ui, sans-serif;
 
   --ease-glide: cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -97,6 +101,68 @@ html.custom-cursor * {
   html {
     scroll-behavior: auto;
   }
+  .marquee-track,
+  .orbit-ring,
+  .hero-name-shimmer {
+    animation: none;
+  }
+}
+
+/* ── Hero name reveal (home page) ────────────────────────────
+   A second copy of the name sits on top of the white one, filled
+   with an animated iridescent gradient clipped to the letterforms.
+   It is only visible through a soft three-lobe mask whose centre
+   (--mx/--my) chases the cursor and whose lobes (--w*) wobble —
+   the noth.in blob effect, in pure CSS + a few custom props. */
+.hero-name-shimmer {
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  background: linear-gradient(115deg, #8ab4ff 0%, #a78bfa 28%, #fb7185 55%, #f4a13c 78%, #8ab4ff 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer-pan 8s linear infinite;
+  -webkit-mask-image:
+    radial-gradient(150px 120px at calc(var(--mx, -999px) + var(--w1x, 0px)) calc(var(--my, -999px) + var(--w1y, 0px)), #000 35%, transparent 72%),
+    radial-gradient(120px 145px at calc(var(--mx, -999px) + var(--w2x, 0px)) calc(var(--my, -999px) + var(--w2y, 0px)), #000 35%, transparent 72%),
+    radial-gradient(165px 110px at calc(var(--mx, -999px) - var(--w1y, 0px)) calc(var(--my, -999px) + var(--w2x, 0px)), #000 35%, transparent 72%);
+  mask-image:
+    radial-gradient(150px 120px at calc(var(--mx, -999px) + var(--w1x, 0px)) calc(var(--my, -999px) + var(--w1y, 0px)), #000 35%, transparent 72%),
+    radial-gradient(120px 145px at calc(var(--mx, -999px) + var(--w2x, 0px)) calc(var(--my, -999px) + var(--w2y, 0px)), #000 35%, transparent 72%),
+    radial-gradient(165px 110px at calc(var(--mx, -999px) - var(--w1y, 0px)) calc(var(--my, -999px) + var(--w2x, 0px)), #000 35%, transparent 72%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+}
+@keyframes shimmer-pan {
+  to {
+    background-position: 300% 0%;
+  }
+}
+
+/* ── Orbit ring (home hero) ──────────────────────────────────
+   The rotation lives on its own element so it doesn't fight the
+   centering translate on the parent. */
+@keyframes orbit-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.orbit-ring {
+  animation: orbit-rotate 44s linear infinite;
+}
+
+/* ── Keyword marquee (home page) ─────────────────────────────
+   The track holds two copies of the word list; sliding -50%
+   loops seamlessly. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 32s linear infinite;
 }
 
 /* ── Apple-style Liquid Glass ─────────────────────────────────

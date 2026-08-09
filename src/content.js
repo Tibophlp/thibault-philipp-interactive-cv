@@ -11,14 +11,45 @@ export const sections = [
   { path: '/contact', label: 'Contact' },
 ]
 
+const homeDefault = {
+  tagline: 'A final-year Business Development student who thinks like a builder.',
+  availability: 'Open to Sales / BD roles · Dublin / London from Jan 2027',
+  marquee: [
+    'Business Development',
+    'GTM Engineering',
+    'Fintech · AML/KYC',
+    'Outbound & Enrichment',
+    'Automation',
+    'BBA @ EDHEC',
+    'FR · EN · ES',
+  ],
+  about: {
+    /* `lead` renders bold, immediately followed by `rest` on the same
+       line — so it needs its own closing punctuation. */
+    lead: 'Looking for an internship starting January 2027.',
+    rest:
+      'A business degree taught me how deals get done, and the automation stack I build on the side shows how I like to work.',
+  },
+  stats: [
+    { value: '4th', label: 'Best French business school (Le Point 2026)' },
+    { value: '3', label: 'Working languages' },
+    { value: '2027', label: 'BBA graduate, EDHEC Business School' },
+    { value: 'n8n', label: 'Sales automation stack, self-taught' },
+  ],
+  cta: {
+    title: 'Got a role to offer?',
+    sub: 'Let’s grab 15 minutes and see if it clicks.',
+  },
+}
+
 const nowDefault = {
-  eyebrow: 'What I do now',
+  eyebrow: 'What I did',
   company: 'Marble',
   location: 'Paris · Fintech (Series A)',
   lead:
-    'I onboard fintech clients onto Marble’s AML/KYC compliance platform and run the outreach that fills the pipeline behind it.',
+    'I onboarded fintech clients onto Marble’s AML/KYC compliance platform and ran the outreach that filled the pipeline behind it.',
   body:
-    'Day to day that means coordinating technical integration, helping teams adopt rule-building and data-configuration workflows, and translating dense regulatory requirements into something the platform can actually enforce — while designing geographic outreach campaigns that qualify the next set of accounts.',
+    'Day to day that meant coordinating technical integration, helping teams adopt rule-building and data-configuration workflows, and translating dense regulatory requirements into something the platform could actually enforce — while designing geographic outreach campaigns that qualified the next set of accounts.',
   markets: ['BVI', 'United States', 'United Kingdom', 'Luxembourg', 'France', 'Singapore'],
 }
 
@@ -34,7 +65,7 @@ const trackDefault = [
       'Onboarded fintech clients onto a Series-A AML/KYC compliance platform and ran the outreach that qualified them.',
     points: [
       'Onboarded major fintech clients onto a SaaS AML/KYC compliance platform, coordinating technical integration and driving adoption of rule-building and data-configuration workflows.',
-      'Designed and executed geographic outreach campaigns targeting BVI-registered financial institutions and US-based banks, identifying and qualifying prospects for the Series-A startup.',
+      'Designed and executed multichannel outbound campaigns across BVI, US, EU, and Baltic markets, reaching 500+ prospects and qualifying new business opportunities for the Series-A startup.',
       'Worked with compliance and operations teams to map regulatory requirements and translate them into platform configurations.',
     ],
   },
@@ -105,8 +136,8 @@ const builderDefault = [
 const toolkitDefault = {
   languages: [
     { name: 'French', level: 'Native', dots: 5 },
-    { name: 'English', level: 'C1 · Fluent', dots: 4 },
-    { name: 'Spanish', level: 'B1', dots: 2 },
+    { name: 'English', level: 'Native', dots: 5 },
+    { name: 'Spanish', level: 'B1', dots: 3 },
     { name: 'Mandarin', level: 'Notions', dots: 1 },
   ],
   frameworks: ['Challenger Sale', 'Jab, Jab, Jab, Right Hook', 'Value-based discovery'],
@@ -183,22 +214,17 @@ const contactDefault = {
     {
       id: 'github',
       label: 'GitHub',
-      handle: '⚠︎ add your GitHub username',
-      href: 'https://github.com/',
-      placeholder: true,
+      handle: 'Tibophlp',
+      href: 'https://github.com/Tibophlp',
+      placeholder: false,
     },
-    {
-      id: 'x',
-      label: 'X / Twitter',
-      handle: '⚠︎ add if you want it shown',
-      href: 'https://x.com/',
-      placeholder: true,
-    },
+    /* Kept out of the recruiter-facing Contact page on purpose — the handle
+       lives here so it's one flag away if you ever want it shown. */
     {
       id: 'instagram',
       label: 'Instagram',
-      handle: '⚠︎ add if you want it shown',
-      href: 'https://instagram.com/',
+      handle: 'tibo.phlp',
+      href: 'https://www.instagram.com/tibo.phlp/',
       placeholder: true,
     },
   ],
@@ -220,6 +246,7 @@ const stored = (() => {
 })()
 
 export const contentDefaults = {
+  home: homeDefault,
   now: nowDefault,
   track: trackDefault,
   builder: builderDefault,
@@ -229,6 +256,7 @@ export const contentDefaults = {
   contact: contactDefault,
 }
 
+export const home = stored?.home ?? homeDefault
 export const now = stored?.now ?? nowDefault
 export const track = stored?.track ?? trackDefault
 export const builder = stored?.builder ?? builderDefault

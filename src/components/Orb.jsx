@@ -121,6 +121,9 @@ const fragmentShader = /* glsl */ `
 function OrbBody({ pointer, reducedMotion, mobileOrMini }) {
   const matRef = useRef()
   const groupRef = useRef()
+  /* Shared mood state — the Eyes drive the state machine, the body reads
+     it for matching body language (shake, bounce, slump). */
+  const moodRef = useRef({ name: 'idle', t: 0, dur: 0, next: 6 + Math.random() * 8 })
 
   const uniforms = useMemo(() => ({ uTime: { value: 0 } }), [])
 
@@ -129,12 +132,22 @@ function OrbBody({ pointer, reducedMotion, mobileOrMini }) {
       matRef.current.uniforms.uTime.value += delta
     }
     if (groupRef.current) {
-      // parallax lean toward the cursor
-      const tx = pointer.current.y * 0.3
+      const m = moodRef.current
+      // parallax lean toward the cursor (+ a sulky droop while sad)
+      const tx = pointer.current.y * 0.3 + (m.name === 'sad' && !reducedMotion ? 0.14 : 0)
       const ty = pointer.current.x * 0.32
       groupRef.current.rotation.x += (tx - groupRef.current.rotation.x) * 0.09
       groupRef.current.rotation.y += (ty - groupRef.current.rotation.y) * 0.09
-      if (!reducedMotion) groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.15) * 0.04
+      if (!reducedMotion) {
+        // idle sway + an angry tremble while mad
+        groupRef.current.rotation.z =
+          Math.sin(state.clock.elapsedTime * 0.15) * 0.04 +
+          (m.name === 'mad' ? Math.sin(state.clock.elapsedTime * 38) * 0.01 : 0)
+        // giggle-bounce while laughing
+        const targetScale = m.name === 'laugh' ? 1 + Math.abs(Math.sin(m.t * 13)) * 0.02 : 1
+        const s = THREE.MathUtils.lerp(groupRef.current.scale.x, targetScale, 0.2)
+        groupRef.current.scale.setScalar(s)
+      }
     }
   })
 
@@ -154,54 +167,145 @@ function OrbBody({ pointer, reducedMotion, mobileOrMini }) {
         </mesh>
       </group>
       {/* eyes live outside the tilt group so tracking stays direct */}
-      <Eyes pointer={pointer} reducedMotion={reducedMotion} />
+      <Eyes pointer={pointer} reducedMotion={reducedMotion} moodRef={moodRef} />
     </>
   )
 }
 
 const R_FACE = 1.36 // radius the eyes ride on, just outside the sphere
 
-function Eyes({ pointer, reducedMotion }) {
+/* ── Eyes: gaze, blinking, and moods ─────────────────────────
+   The orb mostly follows the cursor, but every so often it takes
+   over with a mood of its own — mad (eyes slant inward, squint,
+   glare at the cursor with a tremble), sad (eyes droop outward,
+   half-close, sink down and away), laugh (eyes squish into happy
+   slits and bounce), or a brief wide-eyed surprise. Everything is
+   expressed with the two eyes alone; no mouth. */
+function Eyes({ pointer, reducedMotion, moodRef }) {
   const posRef = useRef() // moves across the face + hugs the surface
-  const lidRef = useRef() // vertical scale = blink
+  const lidRef = useRef() // vertical scale = blink/squint, x = wide-eyed
+  const leftRef = useRef() // per-eye tilt = expression "brows"
+  const rightRef = useRef()
   const pos = useRef({ x: 0, y: 0 })
   const blink = useRef({ active: false, t: 0, next: 2 + Math.random() * 3 })
   // idle wander: when the pointer has been still for a while (or on touch
   // devices, where it never moves), the eyes drift to random spots instead
   // of staring blankly at the centre.
   const wander = useRef({ x: 0, y: 0, next: 1.5 })
+  // smoothed expression channels, lerped toward per-mood targets
+  const anim = useRef({ rotL: 0, rotR: 0, squint: 1, size: 1 })
 
   useFrame((_, delta) => {
+    const m = moodRef.current
+
+    // ── mood state machine: idle → random mood → back to idle
+    if (!reducedMotion) {
+      if (m.name === 'idle') {
+        m.next -= delta
+        if (m.next <= 0) {
+          const roll = Math.random()
+          m.name = roll < 0.28 ? 'mad' : roll < 0.52 ? 'sad' : roll < 0.88 ? 'laugh' : 'surprise'
+          m.t = 0
+          m.dur = m.name === 'surprise' ? 1.3 : 2.4 + Math.random() * 1.4
+        }
+      } else {
+        m.t += delta
+        if (m.t >= m.dur) {
+          m.name = 'idle'
+          m.next = 8 + Math.random() * 10 // next mood in 8–18s
+        }
+      }
+    }
+
+    // ── gaze target: cursor, idle wander, or mood override
     const idle = performance.now() - pointer.current.t > 2500
     let px = pointer.current.x
     let py = pointer.current.y
-    if (idle && !reducedMotion) {
+    let k = 0.16
+    if (idle && !reducedMotion && m.name === 'idle') {
       const w = wander.current
       w.next -= delta
       if (w.next <= 0) {
-        w.x = (Math.random() * 2 - 1) * 0.7
-        w.y = (Math.random() * 2 - 1) * 0.5
+        w.x = (Math.random() * 2 - 1) * 0.8
+        w.y = (Math.random() * 2 - 1) * 0.6
         w.next = 1.8 + Math.random() * 2.4
       }
       px = w.x
       py = w.y
+      k = 0.045
     }
-    // ── follow the target across the whole face (generous vertical travel)
-    const tx = THREE.MathUtils.clamp(px * 0.85, -0.72, 0.72)
-    const ty = THREE.MathUtils.clamp(py * 0.95, -0.78, 0.78)
-    const k = idle ? 0.045 : 0.16 // drift lazily, track the cursor snappily
-    pos.current.x += (tx - pos.current.x) * k
-    pos.current.y += (ty - pos.current.y) * k
+    if (m.name === 'sad') {
+      // look down and away, slowly
+      px = px * 0.25
+      py = -0.85
+      k = 0.05
+    } else if (m.name === 'laugh') {
+      // eyes lift while laughing
+      px = 0
+      py = 0.35
+      k = 0.12
+    } else if (m.name === 'mad') {
+      k = 0.22 // glare AT the cursor, snappily
+    } else if (m.name === 'surprise') {
+      k = 0.3
+    }
+
+    // map to face coordinates, then clamp to an ellipse sized so that the
+    // OUTER edge of each eye always stays well inside the sphere silhouette
+    let ex = px * 0.62
+    let ey = py * 0.7
+    const rad = Math.hypot(ex / 0.52, ey / 0.62)
+    if (rad > 1) {
+      ex /= rad
+      ey /= rad
+    }
+    pos.current.x += (ex - pos.current.x) * k
+    pos.current.y += (ey - pos.current.y) * k
+
+    // mood positional accents: angry tremble, laughing bounce
+    let offX = 0
+    let offY = 0
+    if (!reducedMotion) {
+      if (m.name === 'mad') offX = Math.sin(m.t * 26) * 0.02
+      else if (m.name === 'laugh') offY = Math.abs(Math.sin(m.t * 13)) * 0.07
+    }
 
     if (posRef.current) {
-      const x = pos.current.x
-      const y = pos.current.y
+      const x = pos.current.x + offX
+      const y = pos.current.y + offY
       // project onto the sphere so the eyes sit ON the surface, not a flat plane
       const z = Math.sqrt(Math.max(R_FACE * R_FACE - x * x - y * y, 0.01)) + 0.02
       posRef.current.position.set(x, y, z)
     }
 
-    // ── blinking
+    // ── expression targets per mood
+    let rotL = 0
+    let rotR = 0
+    let squint = 1
+    let size = 1
+    if (!reducedMotion) {
+      if (m.name === 'mad') {
+        rotL = -0.45 // tops lean toward each other: ∧ angry brows
+        rotR = 0.45
+        squint = 0.55
+      } else if (m.name === 'sad') {
+        rotL = 0.34 // tops lean outward: ∨ droop
+        rotR = -0.34
+        squint = 0.72
+      } else if (m.name === 'laugh') {
+        squint = 0.2 + Math.abs(Math.sin(m.t * 13)) * 0.1 // bouncing happy slits
+      } else if (m.name === 'surprise') {
+        size = 1.3
+        squint = 1.1
+      }
+    }
+    const a = anim.current
+    a.rotL += (rotL - a.rotL) * 0.12
+    a.rotR += (rotR - a.rotR) * 0.12
+    a.squint += (squint - a.squint) * 0.14
+    a.size += (size - a.size) * 0.14
+
+    // ── blinking (compounds with the mood squint)
     const b = blink.current
     if (!reducedMotion) {
       if (!b.active) {
@@ -221,20 +325,23 @@ function Eyes({ pointer, reducedMotion }) {
     }
     if (lidRef.current) {
       const phase = b.active ? Math.min(b.t / 0.16, 1) : 0
-      const scaleY = 1 - Math.sin(phase * Math.PI) * 0.94 // 1 → ~0.06 → 1
-      lidRef.current.scale.y = scaleY
+      const blinkScale = 1 - Math.sin(phase * Math.PI) * 0.94 // 1 → ~0.06 → 1
+      lidRef.current.scale.y = blinkScale * a.squint * a.size
+      lidRef.current.scale.x = a.size
     }
+    if (leftRef.current) leftRef.current.rotation.z = a.rotL
+    if (rightRef.current) rightRef.current.rotation.z = a.rotR
   })
 
   // white pills, drawn on top of the orb so they never get occluded
   return (
     <group ref={posRef} renderOrder={10}>
       <group ref={lidRef}>
-        <mesh position={[-0.3, 0, 0]} renderOrder={10}>
+        <mesh ref={leftRef} position={[-0.3, 0, 0]} renderOrder={10}>
           <capsuleGeometry args={[0.088, 0.28, 8, 16]} />
           <meshBasicMaterial color="#ffffff" toneMapped={false} depthTest={false} />
         </mesh>
-        <mesh position={[0.3, 0, 0]} renderOrder={10}>
+        <mesh ref={rightRef} position={[0.3, 0, 0]} renderOrder={10}>
           <capsuleGeometry args={[0.088, 0.28, 8, 16]} />
           <meshBasicMaterial color="#ffffff" toneMapped={false} depthTest={false} />
         </mesh>
@@ -285,7 +392,11 @@ function Specks({ count = 320, reducedMotion }) {
 
 /* No post-processing: the Bloom pass cost a full-screen render every frame
    plus ~200KB of bundle. The glow now comes from the shader highlights and
-   a cheap CSS radial layer behind the canvas. */
+   a cheap CSS radial layer behind the canvas.
+
+   The sphere always sits at the scene origin — the viewport centre. It is
+   never repositioned or rescaled by scroll; the hero simply fades it out
+   (see Home.jsx), which keeps the canvas geometry untouched. */
 function Rig({ pointer, reducedMotion, mobileOrMini }) {
   return (
     <>

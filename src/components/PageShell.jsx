@@ -50,11 +50,11 @@ export default function PageShell({ eyebrow, title, intro, children }) {
         >
           <Link
             to="/"
-            className="text-[11px] uppercase tracking-[0.3em] text-fog transition-colors hover:text-ghost"
+            className="font-mono text-[11px] uppercase tracking-[0.3em] text-fog transition-colors hover:text-ghost"
           >
             ← Back
           </Link>
-          <span className="text-[11px] uppercase tracking-[0.3em] text-smoke">
+          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-smoke">
             Thibault Philipp
           </span>
         </motion.div>
@@ -65,7 +65,7 @@ export default function PageShell({ eyebrow, title, intro, children }) {
           transition={{ duration: 0.9, ease, delay: 0.08 }}
           className="mt-16 md:mt-24"
         >
-          <p className="mb-4 text-[11px] uppercase tracking-[0.3em] text-fog">{eyebrow}</p>
+          <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.3em] text-fog">{eyebrow}</p>
           <h1 className="text-4xl font-medium tracking-tight text-ghost md:text-6xl">{title}</h1>
           {intro && <p className="mt-6 max-w-2xl text-base leading-relaxed text-mist">{intro}</p>}
         </motion.header>
@@ -85,14 +85,14 @@ export default function PageShell({ eyebrow, title, intro, children }) {
               to={prev.path}
               className="group flex flex-col gap-1 text-left"
             >
-              <span className="text-[10px] uppercase tracking-[0.3em] text-smoke">Previous</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-smoke">Previous</span>
               <span className="text-sm text-fog transition-colors group-hover:text-ghost md:text-base">
                 ← {prev.label}
               </span>
             </Link>
           ) : (
             <Link to="/" className="group flex flex-col gap-1 text-left">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-smoke">Back to</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-smoke">Back to</span>
               <span className="text-sm text-fog transition-colors group-hover:text-ghost md:text-base">
                 ← Home
               </span>
@@ -100,14 +100,14 @@ export default function PageShell({ eyebrow, title, intro, children }) {
           )}
           {next ? (
             <Link to={next.path} className="group flex flex-col gap-1 text-right">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-smoke">Next</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-smoke">Next</span>
               <span className="text-sm text-fog transition-colors group-hover:text-ghost md:text-base">
                 {next.label} →
               </span>
             </Link>
           ) : (
             <Link to="/" className="group flex flex-col gap-1 text-right">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-smoke">Back to</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-smoke">Back to</span>
               <span className="text-sm text-fog transition-colors group-hover:text-ghost md:text-base">
                 Home →
               </span>
@@ -128,7 +128,7 @@ export default function PageShell({ eyebrow, title, intro, children }) {
               className="glass glass-hover group flex items-center justify-between rounded-3xl p-6 md:p-7"
             >
               <div>
-                <p className="text-[11px] uppercase tracking-[0.25em] text-fog">Hiring?</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-fog">Hiring?</p>
                 <p className="mt-1 text-base text-ghost md:text-lg">
                   Grab 15 minutes — Dublin or London, from January 2027.
                 </p>

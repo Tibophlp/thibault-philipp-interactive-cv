@@ -27,8 +27,8 @@ export default function Experience() {
           }}
         />
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <p className="text-[11px] uppercase tracking-[0.3em] text-violet">{now.eyebrow}</p>
-          <p className="text-[11px] uppercase tracking-[0.2em] text-smoke">
+          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-violet">{now.eyebrow}</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-smoke">
             {now.company} · {now.location}
           </p>
         </div>
@@ -57,7 +57,7 @@ export default function Experience() {
           >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="text-xl font-medium text-ghost md:text-2xl">{role.company}</h2>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-violet">{role.tag}</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-violet">{role.tag}</span>
             </div>
             <p className="mt-1 text-fog">{role.role}</p>
             <p className="text-sm text-smoke">

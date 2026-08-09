@@ -21,8 +21,8 @@ export default function NotFound() {
         transition={{ duration: 0.8, ease }}
         className="relative z-10 mt-[52vh]"
       >
-        <p className="text-[11px] uppercase tracking-[0.3em] text-fog">404 — lost in the void</p>
-        <h1 className="mt-3 font-round text-2xl font-medium text-ghost md:text-3xl">
+        <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-fog">404 — lost in the void</p>
+        <h1 className="mt-3 text-2xl font-medium tracking-tight text-ghost md:text-3xl">
           This page doesn&rsquo;t exist.
         </h1>
         <Link
