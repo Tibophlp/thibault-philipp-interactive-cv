@@ -23,19 +23,19 @@ export default function Projects() {
             <div className="flex items-start justify-between gap-3">
               <h2 className="text-lg font-medium text-ghost md:text-xl">{p.name}</h2>
               {p.placeholder && (
-                <span className="shrink-0 rounded-full border border-amber/40 px-2.5 py-0.5 text-[9px] uppercase tracking-wider text-amber">
+                <span className="shrink-0 rounded-full border border-amber/40 px-2.5 py-0.5 text-[12px] uppercase tracking-wider text-amber">
                   In progress
                 </span>
               )}
             </div>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-smoke">{p.kind}</p>
-            <p className="mt-4 flex-1 text-sm leading-relaxed text-mist">{p.detail}</p>
+            <p className="mt-1 text-[12px] uppercase tracking-[0.2em] text-smoke">{p.kind}</p>
+            <p className="mt-4 flex-1 text-[15px] leading-relaxed text-mist md:text-base">{p.detail}</p>
             {p.stack.length > 0 && (
               <div className="mt-6 flex flex-wrap gap-2">
                 {p.stack.map((s) => (
                   <span
                     key={s}
-                    className="rounded-full border border-ash px-3 py-1 text-xs text-fog"
+                    className="rounded-full border border-ash px-3 py-1 text-[13px] text-fog"
                   >
                     {s}
                   </span>

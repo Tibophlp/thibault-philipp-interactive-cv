@@ -70,7 +70,7 @@ function Gate({ onUnlock }) {
       className="flex min-h-dvh w-full flex-col items-center justify-center bg-void px-6 text-ghost outline-none"
     >
       <form onSubmit={submit} className="glass w-full max-w-sm p-8 text-center">
-        <p className="text-[11px] uppercase tracking-[0.3em] text-fog">Studio</p>
+        <p className="text-[12px] uppercase tracking-[0.22em] text-fog">Studio</p>
         <p className="mt-2 text-sm text-smoke">This area is for Thibault.</p>
         <input
           type="password"
@@ -165,12 +165,12 @@ function Editor() {
       <div className="mx-auto max-w-4xl">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.3em] text-violet">Studio</p>
+            <p className="text-[12px] uppercase tracking-[0.22em] text-violet">Studio</p>
             <h1 className="mt-1 text-2xl font-medium tracking-tight md:text-3xl">Edit site content</h1>
           </div>
           <Link
             to="/"
-            className="text-[11px] uppercase tracking-[0.25em] text-fog transition-colors hover:text-ghost"
+            className="text-[12px] uppercase tracking-[0.2em] text-fog transition-colors hover:text-ghost"
           >
             ← View site
           </Link>

@@ -12,7 +12,7 @@ function Card({ label, delay, children }) {
       transition={{ duration: 0.7, ease, delay }}
       className="glass p-7 md:p-8"
     >
-      <p className="mb-5 text-[11px] uppercase tracking-[0.3em] text-fog">{label}</p>
+      <p className="mb-5 text-[12px] uppercase tracking-[0.22em] text-fog">{label}</p>
       {children}
     </motion.div>
   )
@@ -24,7 +24,7 @@ function Tags({ items }) {
       {items.map((t) => (
         <span
           key={t}
-          className="rounded-full border border-ash px-3 py-1.5 text-xs text-mist transition-colors hover:border-fog hover:text-ghost"
+          className="rounded-full border border-ash px-3 py-1.5 text-[13px] text-mist transition-colors hover:border-fog hover:text-ghost"
         >
           {t}
         </span>
@@ -47,7 +47,7 @@ export default function Skills() {
               <li key={l.name} className="flex items-center justify-between gap-4">
                 <span className="text-mist">{l.name}</span>
                 <span className="flex items-center gap-3">
-                  <span className="text-xs uppercase tracking-wider text-smoke">{l.level}</span>
+                  <span className="text-[12px] uppercase tracking-wider text-fog">{l.level}</span>
                   <span className="flex gap-1" aria-hidden="true">
                     {[1, 2, 3, 4, 5].map((d) => (
                       <span

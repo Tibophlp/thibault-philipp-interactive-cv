@@ -179,7 +179,7 @@ function HeroArtifacts({ reduceMotion }) {
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, ease, delay: 1.15 }}
-        className="absolute left-7 top-1/2 flex -translate-y-1/2 flex-col gap-2 text-left font-mono text-[10px] uppercase tracking-[0.25em] text-smoke"
+        className="absolute left-7 top-1/2 flex -translate-y-1/2 flex-col gap-2 text-left font-mono text-[12px] uppercase tracking-[0.2em] text-smoke"
       >
         <span>48.8566° N — 2.3522° E</span>
         <span>Paris · {time}</span>
@@ -190,7 +190,7 @@ function HeroArtifacts({ reduceMotion }) {
         initial={{ opacity: 0, x: 10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, ease, delay: 1.3 }}
-        className="absolute right-7 top-1/2 flex -translate-y-1/2 flex-col items-end gap-2 text-right font-mono text-[10px] uppercase tracking-[0.25em] text-smoke"
+        className="absolute right-7 top-1/2 flex -translate-y-1/2 flex-col items-end gap-2 text-right font-mono text-[12px] uppercase tracking-[0.2em] text-smoke"
       >
         <span className="flex items-center gap-2 text-fog">
           <span className={`h-1.5 w-1.5 rounded-full bg-violet ${reduceMotion ? '' : 'animate-pulse'}`} />
@@ -280,7 +280,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease, delay: 0.7 }}
-            className="mt-4 font-mono text-[10px] uppercase tracking-[0.25em] text-fog md:text-[11px]"
+            className="mt-4 font-mono text-[12px] uppercase tracking-[0.2em] text-fog md:text-[12px]"
           >
             {home.availability}
           </motion.p>
@@ -290,7 +290,7 @@ export default function Home() {
             transition={{ duration: 1, ease, delay: 1 }}
             className="mt-7 flex flex-col items-center gap-1.5"
           >
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-smoke">
+            <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-smoke">
               Scroll to explore
             </span>
             <motion.span
@@ -307,7 +307,7 @@ export default function Home() {
 
       {/* ── Keyword marquee ── */}
       <div className="relative z-10 overflow-hidden border-y border-hairline py-4" aria-hidden="true">
-        <div className="marquee-track flex w-max items-center whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.3em] text-fog">
+        <div className="marquee-track flex w-max items-center whitespace-nowrap font-mono text-[12px] uppercase tracking-[0.22em] text-fog">
           {[...home.marquee, ...home.marquee].map((word, i) => (
             <span key={i} className="flex items-center">
               <span className="px-6">{word}</span>
@@ -319,7 +319,7 @@ export default function Home() {
 
       {/* ── About statement + proof-of-work stats ── */}
       <section className="relative z-10 mx-auto max-w-5xl px-6 py-24 md:py-28">
-        <motion.p {...reveal} className="font-mono text-[11px] uppercase tracking-[0.3em] text-violet">
+        <motion.p {...reveal} className="font-mono text-[12px] uppercase tracking-[0.22em] text-violet">
           About
         </motion.p>
         <motion.p
@@ -337,7 +337,7 @@ export default function Home() {
           {home.stats.map((s) => (
             <div key={s.label} className="bg-void p-6 md:p-8">
               <p className="text-3xl font-bold tracking-tight md:text-5xl">{s.value}</p>
-              <p className="mt-3 font-mono text-[10px] uppercase leading-relaxed tracking-[0.2em] text-smoke">
+              <p className="mt-3 font-mono text-[12px] uppercase leading-relaxed tracking-[0.2em] text-smoke">
                 {s.label}
               </p>
             </div>
@@ -347,7 +347,7 @@ export default function Home() {
 
       {/* ── Section nav as big typographic rows ── */}
       <section className="relative z-10 mx-auto max-w-5xl px-6 pb-24 md:pb-28">
-        <motion.p {...reveal} className="mb-8 font-mono text-[11px] uppercase tracking-[0.3em] text-violet">
+        <motion.p {...reveal} className="mb-8 font-mono text-[12px] uppercase tracking-[0.22em] text-violet">
           Explore
         </motion.p>
         <nav aria-label="Site sections">
@@ -363,7 +363,7 @@ export default function Home() {
                     <h2 className="text-3xl font-bold tracking-tight text-ghost transition-transform duration-500 ease-out group-hover:translate-x-2 md:text-5xl">
                       {b.title}
                     </h2>
-                    <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.25em] text-smoke">
+                    <p className="mt-2 font-mono text-[12px] uppercase tracking-[0.2em] text-smoke">
                       {b.sub}
                     </p>
                   </div>
@@ -380,7 +380,7 @@ export default function Home() {
 
       {/* ── Closing CTA ── */}
       <section className="relative z-10 mx-auto max-w-5xl px-6 pb-28">
-        <motion.p {...reveal} className="font-mono text-[11px] uppercase tracking-[0.3em] text-violet">
+        <motion.p {...reveal} className="font-mono text-[12px] uppercase tracking-[0.22em] text-violet">
           Contact
         </motion.p>
         <motion.h2
@@ -428,7 +428,7 @@ export default function Home() {
       </section>
 
       {/* tiny footer so the scroll lands somewhere intentional */}
-      <footer className="relative z-10 flex flex-col items-center gap-2 border-t border-hairline px-6 pb-10 pt-8 text-center font-mono text-[10px] uppercase tracking-[0.25em] text-smoke">
+      <footer className="relative z-10 flex flex-col items-center gap-2 border-t border-hairline px-6 pb-10 pt-8 text-center font-mono text-[12px] uppercase tracking-[0.2em] text-smoke">
         <span onClick={onSecretTap} className="select-none">
           © {new Date().getFullYear()} Thibault Philipp
         </span>

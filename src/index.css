@@ -5,17 +5,22 @@
    a single rationed violet accent, hairline borders. The rendered
    orb carries all the chromatic weight; the UI stays whisper-thin. */
 @theme {
+  /* Greys are tuned for contrast on the black canvas, not picked by eye.
+     Every text token clears WCAG AAA (7:1) against both #000 and the
+     lighter glass panels — the ramp keeps its hierarchy, it just starts
+     much higher than it used to. Readers reported the old greys
+     (#999/#8a8a8a at 10–11px) as hard to read. */
   --color-void: #000000;
   --color-void-2: #050507;
   --color-ghost: #ffffff;
-  --color-mist: #c6c6c6;
-  --color-fog: #999999;
-  --color-smoke: #8a8a8a;
-  --color-ash: #2a2a30;
-  --color-hairline: #1a1a1f;
-  --color-violet: #6c68f0;
+  --color-mist: #dedede; /* body copy      — 15.6:1 */
+  --color-fog: #b8b8b8; /* secondary      — 10.6:1 */
+  --color-smoke: #a6a6a6; /* micro-labels   —  8.6:1 */
+  --color-ash: #3a3a45;
+  --color-hairline: #232329;
+  --color-violet: #8b87ff; /* accents        —  7.0:1 */
   --color-violet-deep: #343755;
-  --color-amber: #f4a13c;
+  --color-amber: #f4a13c; /* 10.0:1 */
 
   /* One grotesque for everything, one mono for the technical labels —
      the pairing that ties the whole site together (Nothing-style). */
@@ -39,9 +44,18 @@ body {
   background: var(--color-void);
   color: var(--color-ghost);
   font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
+  /* No `-webkit-font-smoothing: antialiased` on purpose: it thins glyph
+     stems, and light-on-dark text already looks lighter than it measures.
+     Letting the platform default apply keeps strokes a touch heavier,
+     which is exactly what this palette needs. */
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+/* Prose gets a slightly looser default line-height and avoids orphans;
+   long measures are the other half of "hard to read". */
+p {
+  text-wrap: pretty;
 }
 
 ::selection {

@@ -27,18 +27,18 @@ export default function Experience() {
           }}
         />
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-violet">{now.eyebrow}</p>
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-smoke">
+          <p className="font-mono text-[12px] uppercase tracking-[0.22em] text-violet">{now.eyebrow}</p>
+          <p className="font-mono text-[12px] uppercase tracking-[0.2em] text-smoke">
             {now.company} · {now.location}
           </p>
         </div>
         <p className="mt-4 text-lg leading-relaxed text-ghost md:text-xl">{now.lead}</p>
-        <p className="mt-3 text-sm leading-relaxed text-mist md:text-base">{now.body}</p>
+        <p className="mt-3 text-[15px] leading-relaxed text-mist md:text-[17px]">{now.body}</p>
         <div className="mt-5 flex flex-wrap gap-2">
           {now.markets.map((m) => (
             <span
               key={m}
-              className="rounded-full border border-ash px-3 py-1 text-xs text-fog"
+              className="rounded-full border border-ash px-3 py-1 text-[13px] text-fog"
             >
               {m}
             </span>
@@ -57,10 +57,10 @@ export default function Experience() {
           >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="text-xl font-medium text-ghost md:text-2xl">{role.company}</h2>
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-violet">{role.tag}</span>
+              <span className="font-mono text-[12px] uppercase tracking-[0.2em] text-violet">{role.tag}</span>
             </div>
             <p className="mt-1 text-fog">{role.role}</p>
-            <p className="text-sm text-smoke">
+            <p className="text-sm text-fog">
               {role.period} · {role.location}
             </p>
             <ul className="mt-5 space-y-3">
@@ -82,16 +82,16 @@ export default function Experience() {
         transition={{ duration: 0.7, ease, delay: 0.45 }}
         className="mt-14"
       >
-        <p className="mb-5 text-[11px] uppercase tracking-[0.3em] text-fog">
+        <p className="mb-5 text-[12px] uppercase tracking-[0.22em] text-fog">
           Education &amp; Campus
         </p>
         <div className="grid gap-4 sm:grid-cols-2">
           {education.map((e) => (
             <article key={e.id} className="glass flex flex-col p-6 md:p-7">
               <h3 className="text-base font-medium text-ghost md:text-lg">{e.title}</h3>
-              <p className="mt-0.5 text-sm text-fog">{e.detail}</p>
-              <p className="text-xs text-smoke">{e.meta}</p>
-              <p className="mt-3 text-sm leading-relaxed text-mist">{e.note}</p>
+              <p className="mt-0.5 text-[15px] text-fog">{e.detail}</p>
+              <p className="text-[13px] text-fog">{e.meta}</p>
+              <p className="mt-3 text-[15px] leading-relaxed text-mist">{e.note}</p>
             </article>
           ))}
         </div>

@@ -41,7 +41,7 @@ export default function Contact() {
             className="glass glass-hover group flex items-center justify-between p-6 md:p-7"
           >
             <div className="min-w-0">
-              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-fog">{l.label}</p>
+              <p className="font-mono text-[12px] uppercase tracking-[0.2em] text-fog">{l.label}</p>
               <p className="mt-1 truncate text-sm text-ghost md:text-base">{l.handle}</p>
             </div>
             <span className="ml-3 shrink-0 text-fog transition-transform group-hover:translate-x-1">
@@ -60,7 +60,7 @@ export default function Contact() {
           className="glass glass-hover group flex items-center justify-between p-6 text-left md:p-7"
         >
           <div className="min-w-0">
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-fog">Copy email</p>
+            <p className="font-mono text-[12px] uppercase tracking-[0.2em] text-fog">Copy email</p>
             <p className={`mt-1 truncate text-sm md:text-base ${copied ? 'text-violet' : 'text-ghost'}`}>
               {copied ? 'Copied to clipboard ✓' : contact.email}
             </p>
@@ -75,7 +75,7 @@ export default function Contact() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, ease, delay: 0.5 }}
-        className="mt-16 flex flex-col justify-between gap-3 border-t border-hairline pt-8 text-[11px] uppercase tracking-[0.2em] text-smoke sm:flex-row"
+        className="mt-16 flex flex-col justify-between gap-3 border-t border-hairline pt-8 text-[12px] uppercase tracking-[0.2em] text-smoke sm:flex-row"
       >
         <span>Thibault Philipp — {new Date().getFullYear()}</span>
         <span>{contact.phone}</span>
