@@ -1,5 +1,10 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+/* Vercel Analytics. Use the `/react` entry, NOT the `/next` one the Vercel
+   dashboard suggests — this is a Vite SPA, and `/next` imports
+   next/navigation, which doesn't exist here. Cookieless, no consent banner
+   needed; it only reports from the deployed site, not localhost. */
+import { Analytics } from '@vercel/analytics/react'
 import Cursor from './components/Cursor'
 
 /* Route-level code splitting — each page (and three.js via the orb) loads
@@ -75,6 +80,7 @@ function App() {
       <PrefetchRoutes />
       <CardSpotlight />
       <Cursor />
+      <Analytics />
       <Suspense fallback={<div className="min-h-dvh w-full bg-void" />}>
         <Routes>
           <Route path="/" element={<Home />} />
