@@ -155,27 +155,31 @@ const toolkitDefault = {
 const educationDefault = [
   {
     id: 'edhec',
+    kind: 'degree',
     title: 'EDHEC Business School',
     detail: 'BBA, Finance Major',
     meta: 'Lille, France · Class of 2027',
     note: 'Ranked 4th best French business school (Le Point 2026). Coursework: Corporate Finance, CSR, Law, Political Science.',
   },
   {
-    id: 'HighSchool',
+    id: 'shekou',
+    kind: 'secondary',
     title: 'Shekou International School',
     detail: 'Student',
-    meta: 'Shenzhen, China · 2026',
+    meta: 'Shenzhen, China · 2023',
     note: 'Passed the International Baccalaureate Diploma. (HL: English, Economics, Film | SL: Math AA, ESS, French)',
   },
   {
     id: 'abc',
+    kind: 'activity',
     title: 'ABC — Head of Sponsorship',
     detail: 'Student activity',
     meta: 'EDHEC',
     note: 'Managed a team of 5 students to generate leads and organize partnerships with companies. Organized a conference on the Vietnamese economy, secured local media coverage and a sponsored ticket from Vietnam Airlines.',
   },
   {
-    id: 'Podcast',
+    id: 'podcast',
+    kind: 'activity',
     title: 'Rhetorical — Podcast Host',
     detail: 'Representation',
     meta: 'Sep 2023 – Jun 2024',
@@ -230,37 +234,11 @@ const contactDefault = {
   ],
 }
 
-/* ── Overrides (hidden /studio page) ─────────────────────────
-   The studio saves edits to localStorage; they take precedence
-   over the defaults above — in this browser only. Publishing a
-   change for everyone still means updating this file (paste the
-   studio's exported JSON into Claude Code) and redeploying. */
-export const OVERRIDE_KEY = 'tibo:content-overrides'
-
-const stored = (() => {
-  try {
-    return JSON.parse(window.localStorage.getItem(OVERRIDE_KEY) || 'null')
-  } catch {
-    return null
-  }
-})()
-
-export const contentDefaults = {
-  home: homeDefault,
-  now: nowDefault,
-  track: trackDefault,
-  builder: builderDefault,
-  toolkit: toolkitDefault,
-  education: educationDefault,
-  headed: headedDefault,
-  contact: contactDefault,
-}
-
-export const home = stored?.home ?? homeDefault
-export const now = stored?.now ?? nowDefault
-export const track = stored?.track ?? trackDefault
-export const builder = stored?.builder ?? builderDefault
-export const toolkit = stored?.toolkit ?? toolkitDefault
-export const education = stored?.education ?? educationDefault
-export const headed = stored?.headed ?? headedDefault
-export const contact = stored?.contact ?? contactDefault
+export const home = homeDefault
+export const now = nowDefault
+export const track = trackDefault
+export const builder = builderDefault
+export const toolkit = toolkitDefault
+export const education = educationDefault
+export const headed = headedDefault
+export const contact = contactDefault

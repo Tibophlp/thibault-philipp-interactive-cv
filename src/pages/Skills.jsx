@@ -1,18 +1,15 @@
 import { motion } from 'framer-motion'
 import PageShell from '../components/PageShell'
 import { toolkit } from '../content'
-
-const ease = [0.19, 1, 0.22, 1]
+import { enter } from '../motion'
 
 function Card({ label, delay, children }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease, delay }}
+      {...enter(delay)}
       className="glass p-7 md:p-8"
     >
-      <p className="mb-5 text-[12px] uppercase tracking-[0.22em] text-fog">{label}</p>
+      <p className="mb-5 label text-fog">{label}</p>
       {children}
     </motion.div>
   )
@@ -24,7 +21,7 @@ function Tags({ items }) {
       {items.map((t) => (
         <span
           key={t}
-          className="rounded-full border border-ash px-3 py-1.5 text-[13px] text-mist transition-colors hover:border-fog hover:text-ghost"
+          className="rounded-full border border-ash px-3 py-1.5 text-micro text-mist transition-colors hover:border-fog hover:text-ghost"
         >
           {t}
         </span>
@@ -47,7 +44,7 @@ export default function Skills() {
               <li key={l.name} className="flex items-center justify-between gap-4">
                 <span className="text-mist">{l.name}</span>
                 <span className="flex items-center gap-3">
-                  <span className="text-[12px] uppercase tracking-wider text-fog">{l.level}</span>
+                  <span className="label text-fog">{l.level}</span>
                   <span className="flex gap-1" aria-hidden="true">
                     {[1, 2, 3, 4, 5].map((d) => (
                       <span

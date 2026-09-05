@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import PageShell from '../components/PageShell'
 import { contact, headed } from '../content'
-
-const ease = [0.19, 1, 0.22, 1]
+import { enter, fade } from '../motion'
 
 /* Only links with real destinations — placeholders stay in content.js
    until Thibault fills them in, and never reach a recruiter's screen. */
@@ -35,13 +34,11 @@ export default function Contact() {
             href={l.href}
             target={l.href.startsWith('http') ? '_blank' : undefined}
             rel="noreferrer"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease, delay: 0.1 + i * 0.06 }}
+            {...enter(0.1 + i * 0.06)}
             className="glass glass-hover group flex items-center justify-between p-6 md:p-7"
           >
             <div className="min-w-0">
-              <p className="font-mono text-[12px] uppercase tracking-[0.2em] text-fog">{l.label}</p>
+              <p className="label text-fog">{l.label}</p>
               <p className="mt-1 truncate text-sm text-ghost md:text-base">{l.handle}</p>
             </div>
             <span className="ml-3 shrink-0 text-fog transition-transform group-hover:translate-x-1">
@@ -54,13 +51,11 @@ export default function Contact() {
         <motion.button
           type="button"
           onClick={copyEmail}
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.1 + liveLinks.length * 0.06 }}
+          {...enter(0.1 + liveLinks.length * 0.06)}
           className="glass glass-hover group flex items-center justify-between p-6 text-left md:p-7"
         >
           <div className="min-w-0">
-            <p className="font-mono text-[12px] uppercase tracking-[0.2em] text-fog">Copy email</p>
+            <p className="label text-fog">Copy email</p>
             <p className={`mt-1 truncate text-sm md:text-base ${copied ? 'text-violet' : 'text-ghost'}`}>
               {copied ? 'Copied to clipboard ✓' : contact.email}
             </p>
@@ -72,14 +67,12 @@ export default function Contact() {
       </div>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, ease, delay: 0.5 }}
-        className="mt-16 flex flex-col justify-between gap-3 border-t border-hairline pt-8 text-[12px] uppercase tracking-[0.2em] text-smoke sm:flex-row"
+        {...fade(0.5)}
+        className="mt-16 flex flex-col justify-between gap-3 border-t border-hairline pt-8 label text-smoke sm:flex-row"
       >
         <span>Thibault Philipp — {new Date().getFullYear()}</span>
         <span>{contact.phone}</span>
-        <span>Built with React, R3F &amp; a lot of Claude Code</span>
+        <span>Built with React &amp; three.js</span>
       </motion.div>
     </PageShell>
   )

@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import OrbMount from '../components/OrbMount'
 import { home, contact } from '../content'
-
-const ease = [0.19, 1, 0.22, 1]
+import { ease, reveal } from '../motion'
 
 const explore = [
   { index: '01', title: 'Experience', sub: 'Marble · Deloitte · IBG', to: '/experience' },
@@ -14,14 +13,6 @@ const explore = [
 ]
 
 const linkedin = contact.links.find((l) => l.id === 'linkedin')
-
-/* Fade-up used by every below-the-fold section. */
-const reveal = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-40px' },
-  transition: { duration: 0.6, ease },
-}
 
 /* ── Hero name with the blob-reveal effect ───────────────────
    Two stacked copies of the name: the base in solid white, an
@@ -179,7 +170,7 @@ function HeroArtifacts({ reduceMotion }) {
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, ease, delay: 1.15 }}
-        className="absolute left-7 top-1/2 flex -translate-y-1/2 flex-col gap-2 text-left font-mono text-[12px] uppercase tracking-[0.2em] text-smoke"
+        className="absolute left-7 top-1/2 flex -translate-y-1/2 flex-col gap-2 text-left label text-smoke"
       >
         <span>48.8566° N — 2.3522° E</span>
         <span>Paris · {time}</span>
@@ -190,7 +181,7 @@ function HeroArtifacts({ reduceMotion }) {
         initial={{ opacity: 0, x: 10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, ease, delay: 1.3 }}
-        className="absolute right-7 top-1/2 flex -translate-y-1/2 flex-col items-end gap-2 text-right font-mono text-[12px] uppercase tracking-[0.2em] text-smoke"
+        className="absolute right-7 top-1/2 flex -translate-y-1/2 flex-col items-end gap-2 text-right label text-smoke"
       >
         <span className="flex items-center gap-2 text-fog">
           <span className={`h-1.5 w-1.5 rounded-full bg-violet ${reduceMotion ? '' : 'animate-pulse'}`} />
@@ -228,24 +219,10 @@ function HeroArtifacts({ reduceMotion }) {
 
 export default function Home() {
   const reduceMotion = useReducedMotion()
-  /* Secret door: five quick taps on the copyright line → /studio. */
-  const navigate = useNavigate()
-  const taps = useRef({ n: 0, t: 0 })
-  const onSecretTap = () => {
-    const t = Date.now()
-    taps.current = t - taps.current.t < 1200 ? { n: taps.current.n + 1, t } : { n: 1, t }
-    if (taps.current.n >= 5) navigate('/studio')
-  }
 
-  /* The orb belongs to the hero and nowhere else: it sits at the top of
-     the page and scrolls away with it, fading out on the way. Only
-     opacity is animated — never a transform on the canvas wrapper, which
-     is what used to shove the sphere off-centre.
-
-     The fade maps raw scroll pixels straight to opacity: strictly
-     decreasing and clamped, so it cannot reverse. (Deriving it from the
-     hero's own scroll progress was not monotonic — past ~400px the
-     measurement fell back and the orb faded *in* again.) */
+  /* Fade the hero orb out on scroll. Mapped from raw scroll pixels rather
+     than the hero's scroll progress, which is not monotonic — and never as
+     a transform, which would shift the canvas off-centre. */
   const { scrollY } = useScroll()
   const orbOpacity = useTransform(scrollY, [0, 380], [1, 0])
 
@@ -253,9 +230,6 @@ export default function Home() {
     <main id="main" tabIndex={-1} className="relative w-full bg-void text-ghost outline-none">
       {/* ── Hero: big name up top, orb centre stage, one line at the bottom ── */}
       <section className="relative z-10 flex h-dvh flex-col items-center justify-between px-6 pb-10 pt-12 text-center md:pb-14">
-        {/* The orb lives here, anchored to the hero — it scrolls out of
-            frame with the page and fades as it goes. The wrapper is never
-            transformed, only faded. */}
         <motion.div
           className="pointer-events-none absolute inset-0 z-30"
           style={reduceMotion ? undefined : { opacity: orbOpacity }}
@@ -280,7 +254,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease, delay: 0.7 }}
-            className="mt-4 font-mono text-[12px] uppercase tracking-[0.2em] text-fog md:text-[12px]"
+            className="mt-4 label text-fog"
           >
             {home.availability}
           </motion.p>
@@ -290,7 +264,7 @@ export default function Home() {
             transition={{ duration: 1, ease, delay: 1 }}
             className="mt-7 flex flex-col items-center gap-1.5"
           >
-            <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-smoke">
+            <span className="label text-smoke">
               Scroll to explore
             </span>
             <motion.span
@@ -307,7 +281,7 @@ export default function Home() {
 
       {/* ── Keyword marquee ── */}
       <div className="relative z-10 overflow-hidden border-y border-hairline py-4" aria-hidden="true">
-        <div className="marquee-track flex w-max items-center whitespace-nowrap font-mono text-[12px] uppercase tracking-[0.22em] text-fog">
+        <div className="marquee-track flex w-max items-center whitespace-nowrap label text-fog">
           {[...home.marquee, ...home.marquee].map((word, i) => (
             <span key={i} className="flex items-center">
               <span className="px-6">{word}</span>
@@ -319,25 +293,23 @@ export default function Home() {
 
       {/* ── About statement + proof-of-work stats ── */}
       <section className="relative z-10 mx-auto max-w-5xl px-6 py-24 md:py-28">
-        <motion.p {...reveal} className="font-mono text-[12px] uppercase tracking-[0.22em] text-violet">
+        <motion.p {...reveal()} className="label text-violet">
           About
         </motion.p>
         <motion.p
-          {...reveal}
-          transition={{ ...reveal.transition, delay: 0.08 }}
+          {...reveal(0.08)}
           className="mt-6 max-w-3xl text-2xl leading-snug tracking-tight text-smoke md:text-4xl"
         >
           <span className="font-medium text-ghost">{home.about.lead}</span> {home.about.rest}
         </motion.p>
         <motion.div
-          {...reveal}
-          transition={{ ...reveal.transition, delay: 0.16 }}
+          {...reveal(0.16)}
           className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-hairline bg-hairline md:grid-cols-4"
         >
           {home.stats.map((s) => (
             <div key={s.label} className="bg-void p-6 md:p-8">
               <p className="text-3xl font-bold tracking-tight md:text-5xl">{s.value}</p>
-              <p className="mt-3 font-mono text-[12px] uppercase leading-relaxed tracking-[0.2em] text-smoke">
+              <p className="mt-3 label leading-relaxed text-smoke">
                 {s.label}
               </p>
             </div>
@@ -347,12 +319,12 @@ export default function Home() {
 
       {/* ── Section nav as big typographic rows ── */}
       <section className="relative z-10 mx-auto max-w-5xl px-6 pb-24 md:pb-28">
-        <motion.p {...reveal} className="mb-8 font-mono text-[12px] uppercase tracking-[0.22em] text-violet">
+        <motion.p {...reveal()} className="mb-8 label text-violet">
           Explore
         </motion.p>
         <nav aria-label="Site sections">
           {explore.map((b, i) => (
-            <motion.div key={b.to} {...reveal} transition={{ ...reveal.transition, delay: i * 0.06 }}>
+            <motion.div key={b.to} {...reveal(i * 0.06)}>
               <Link
                 to={b.to}
                 className="group flex items-center justify-between gap-6 border-t border-hairline py-7 transition-colors hover:border-ash md:py-9"
@@ -363,7 +335,7 @@ export default function Home() {
                     <h2 className="text-3xl font-bold tracking-tight text-ghost transition-transform duration-500 ease-out group-hover:translate-x-2 md:text-5xl">
                       {b.title}
                     </h2>
-                    <p className="mt-2 font-mono text-[12px] uppercase tracking-[0.2em] text-smoke">
+                    <p className="mt-2 label text-smoke">
                       {b.sub}
                     </p>
                   </div>
@@ -380,26 +352,23 @@ export default function Home() {
 
       {/* ── Closing CTA ── */}
       <section className="relative z-10 mx-auto max-w-5xl px-6 pb-28">
-        <motion.p {...reveal} className="font-mono text-[12px] uppercase tracking-[0.22em] text-violet">
+        <motion.p {...reveal()} className="label text-violet">
           Contact
         </motion.p>
         <motion.h2
-          {...reveal}
-          transition={{ ...reveal.transition, delay: 0.08 }}
+          {...reveal(0.08)}
           className="mt-6 text-4xl font-bold leading-none tracking-tight md:text-7xl"
         >
           {home.cta.title}
         </motion.h2>
         <motion.p
-          {...reveal}
-          transition={{ ...reveal.transition, delay: 0.14 }}
+          {...reveal(0.14)}
           className="mt-5 max-w-xl text-base leading-relaxed text-mist md:text-lg"
         >
           {home.cta.sub}
         </motion.p>
         <motion.div
-          {...reveal}
-          transition={{ ...reveal.transition, delay: 0.2 }}
+          {...reveal(0.2)}
           className="mt-9 flex flex-wrap items-center gap-3"
         >
           <a
@@ -428,10 +397,8 @@ export default function Home() {
       </section>
 
       {/* tiny footer so the scroll lands somewhere intentional */}
-      <footer className="relative z-10 flex flex-col items-center gap-2 border-t border-hairline px-6 pb-10 pt-8 text-center font-mono text-[12px] uppercase tracking-[0.2em] text-smoke">
-        <span onClick={onSecretTap} className="select-none">
-          © {new Date().getFullYear()} Thibault Philipp
-        </span>
+      <footer className="relative z-10 flex flex-col items-center gap-2 border-t border-hairline px-6 pb-10 pt-8 text-center label text-smoke">
+        <span>© {new Date().getFullYear()} Thibault Philipp</span>
         <span>Paris → Dublin / London</span>
       </footer>
     </main>

@@ -2,8 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import OrbMount from './OrbMount'
 import { sections } from '../content'
-
-const ease = [0.19, 1, 0.22, 1]
+import { enter, fade } from '../motion'
 
 /* Layout for the detail pages: a small orb parked top-right that
    doubles as a home button, a back link, a centered content column,
@@ -43,29 +42,25 @@ export default function PageShell({ eyebrow, title, intro, children }) {
 
       <div className="mx-auto max-w-4xl">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease }}
+          {...enter()}
           className="flex items-center justify-between pr-16 md:pr-20"
         >
           <Link
             to="/"
-            className="font-mono text-[12px] uppercase tracking-[0.22em] text-fog transition-colors hover:text-ghost"
+            className="label text-fog transition-colors hover:text-ghost"
           >
             ← Back
           </Link>
-          <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-smoke">
+          <span className="label text-smoke">
             Thibault Philipp
           </span>
         </motion.div>
 
         <motion.header
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease, delay: 0.08 }}
+          {...enter(0.08)}
           className="mt-16 md:mt-24"
         >
-          <p className="mb-4 font-mono text-[12px] uppercase tracking-[0.22em] text-fog">{eyebrow}</p>
+          <p className="mb-4 label text-fog">{eyebrow}</p>
           <h1 className="text-4xl font-medium tracking-tight text-ghost md:text-6xl">{title}</h1>
           {intro && <p className="mt-6 max-w-2xl text-base leading-relaxed text-mist">{intro}</p>}
         </motion.header>
@@ -75,9 +70,7 @@ export default function PageShell({ eyebrow, title, intro, children }) {
         {/* prev / next section nav */}
         <motion.nav
           aria-label="Section navigation"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease, delay: 0.4 }}
+          {...fade(0.4)}
           className="mt-20 flex items-center justify-between gap-4 border-t border-hairline pt-8"
         >
           {prev ? (
@@ -85,14 +78,14 @@ export default function PageShell({ eyebrow, title, intro, children }) {
               to={prev.path}
               className="group flex flex-col gap-1 text-left"
             >
-              <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-smoke">Previous</span>
+              <span className="label text-smoke">Previous</span>
               <span className="text-sm text-fog transition-colors group-hover:text-ghost md:text-base">
                 ← {prev.label}
               </span>
             </Link>
           ) : (
             <Link to="/" className="group flex flex-col gap-1 text-left">
-              <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-smoke">Back to</span>
+              <span className="label text-smoke">Back to</span>
               <span className="text-sm text-fog transition-colors group-hover:text-ghost md:text-base">
                 ← Home
               </span>
@@ -100,14 +93,14 @@ export default function PageShell({ eyebrow, title, intro, children }) {
           )}
           {next ? (
             <Link to={next.path} className="group flex flex-col gap-1 text-right">
-              <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-smoke">Next</span>
+              <span className="label text-smoke">Next</span>
               <span className="text-sm text-fog transition-colors group-hover:text-ghost md:text-base">
                 {next.label} →
               </span>
             </Link>
           ) : (
             <Link to="/" className="group flex flex-col gap-1 text-right">
-              <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-smoke">Back to</span>
+              <span className="label text-smoke">Back to</span>
               <span className="text-sm text-fog transition-colors group-hover:text-ghost md:text-base">
                 Home →
               </span>
@@ -118,9 +111,7 @@ export default function PageShell({ eyebrow, title, intro, children }) {
         {/* standing CTA on every page except contact itself */}
         {!isContact && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, ease, delay: 0.5 }}
+            {...fade(0.5)}
             className="mt-10"
           >
             <Link
@@ -128,7 +119,7 @@ export default function PageShell({ eyebrow, title, intro, children }) {
               className="glass glass-hover group flex items-center justify-between rounded-3xl p-6 md:p-7"
             >
               <div>
-                <p className="font-mono text-[12px] uppercase tracking-[0.2em] text-fog">Hiring?</p>
+                <p className="label text-fog">Hiring?</p>
                 <p className="mt-1 text-base text-ghost md:text-lg">
                   Grab 15 minutes — Dublin or London, from January 2027.
                 </p>

@@ -1,11 +1,9 @@
 import { lazy, Suspense } from 'react'
 
-/* Lazy boundary for the heavy WebGL orb. Keeps three.js out of the initial
-   bundle and provides a static CSS fallback while it loads — and permanently,
-   if the device has no WebGL. The import starts at module evaluation (not on
-   first render) so the chunk downloads in parallel with the page painting. */
-const orbImport = import('./Orb')
-const Orb = lazy(() => orbImport)
+/* Lazy boundary for the heavy WebGL orb (~237KB gzipped of three.js).
+   Deferred to first render, so a device without WebGL — which renders
+   StaticOrb instead — never pays for the download. */
+const Orb = lazy(() => import('./Orb'))
 
 function detectWebGL() {
   if (typeof window === 'undefined') return false

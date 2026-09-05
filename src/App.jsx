@@ -6,6 +6,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
    needed; it only reports from the deployed site, not localhost. */
 import { Analytics } from '@vercel/analytics/react'
 import Cursor from './components/Cursor'
+import ErrorBoundary from './components/ErrorBoundary'
 
 /* Route-level code splitting — each page (and three.js via the orb) loads
    on demand rather than in the initial bundle. */
@@ -15,8 +16,6 @@ const Projects = lazy(() => import('./pages/Projects'))
 const Skills = lazy(() => import('./pages/Skills'))
 const Contact = lazy(() => import('./pages/Contact'))
 const NotFound = lazy(() => import('./pages/NotFound'))
-/* Hidden content editor — unlinked, password-gated, never prefetched. */
-const Studio = lazy(() => import('./pages/Studio'))
 
 /* On navigation: reset scroll and move focus to the main region so
    keyboard and screen-reader users land in the new page's content. */
@@ -81,17 +80,18 @@ function App() {
       <CardSpotlight />
       <Cursor />
       <Analytics />
-      <Suspense fallback={<div className="min-h-dvh w-full bg-void" />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/experience" element={<Experience />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/skills" element={<Skills />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/studio" element={<Studio />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={<div className="min-h-dvh w-full bg-void" />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/experience" element={<Experience />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/skills" element={<Skills />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </>
   )
 }

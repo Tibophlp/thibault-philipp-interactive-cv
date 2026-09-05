@@ -5,11 +5,8 @@
    a single rationed violet accent, hairline borders. The rendered
    orb carries all the chromatic weight; the UI stays whisper-thin. */
 @theme {
-  /* Greys are tuned for contrast on the black canvas, not picked by eye.
-     Every text token clears WCAG AAA (7:1) against both #000 and the
-     lighter glass panels — the ramp keeps its hierarchy, it just starts
-     much higher than it used to. Readers reported the old greys
-     (#999/#8a8a8a at 10–11px) as hard to read. */
+  /* Every text token clears WCAG AAA (7:1) against both #000 and the
+     lighter glass panels. Contrast ratios noted per token. */
   --color-void: #000000;
   --color-void-2: #050507;
   --color-ghost: #ffffff;
@@ -30,11 +27,28 @@
   --font-display: 'Archivo Black', 'Space Grotesk', system-ui, sans-serif;
 
   --ease-glide: cubic-bezier(0.19, 1, 0.22, 1);
+
+  /* Type scale. The micro-label treatment (mono, uppercase, wide tracking)
+     is the site's most repeated element — it gets one size and one tracking
+     value, not a fresh arbitrary bracket at each call site. */
+  --text-label: 0.75rem;
+  --text-micro: 0.8125rem;
+  --text-body-sm: 0.9375rem;
+  --text-body-lg: 1.0625rem;
+  --tracking-label: 0.2em;
 }
 
-/* NOTE: no universal `* { margin:0; padding:0 }` reset here — Tailwind v4's
-   preflight already does it, and an unlayered reset would override every
-   layered padding/margin utility (px-*, mt-*, mx-auto) site-wide. */
+/* No universal reset here: Tailwind v4's preflight covers it, and an
+   unlayered reset would outrank every layered spacing utility. */
+
+/* The micro-label: mono, uppercase, wide-tracked. Used for every eyebrow,
+   HUD readout, meta line and footer note on the site. */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+}
 
 html {
   scroll-behavior: smooth;
@@ -44,10 +58,8 @@ body {
   background: var(--color-void);
   color: var(--color-ghost);
   font-family: var(--font-sans);
-  /* No `-webkit-font-smoothing: antialiased` on purpose: it thins glyph
-     stems, and light-on-dark text already looks lighter than it measures.
-     Letting the platform default apply keeps strokes a touch heavier,
-     which is exactly what this palette needs. */
+  /* No `-webkit-font-smoothing: antialiased`: it thins glyph stems, and
+     light-on-dark text already reads lighter than it measures. */
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
@@ -123,11 +135,9 @@ html.custom-cursor * {
 }
 
 /* ── Hero name reveal (home page) ────────────────────────────
-   A second copy of the name sits on top of the white one, filled
-   with an animated iridescent gradient clipped to the letterforms.
-   It is only visible through a soft three-lobe mask whose centre
-   (--mx/--my) chases the cursor and whose lobes (--w*) wobble —
-   the noth.in blob effect, in pure CSS + a few custom props. */
+   A second copy of the name, filled with an animated gradient and
+   clipped to the letterforms, shows through a three-lobe mask whose
+   centre (--mx/--my) follows the cursor. Driven from Home.jsx. */
 .hero-name-shimmer {
   position: absolute;
   inset: 0;

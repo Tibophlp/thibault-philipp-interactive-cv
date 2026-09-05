@@ -1,16 +1,51 @@
-# React + Vite
+# thibault-philipp-interactive-cv
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Personal portfolio site — a single-page React app deployed on Vercel.
 
-Currently, two official plugins are available:
+## Running it
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev      # http://localhost:5173
+```
 
-## React Compiler
+## Scripts
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Script | What it does |
+|---|---|
+| `npm run dev` | Vite dev server |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm test` | Test suite — must be green before deploying |
+| `npm run test:todo` | Content gaps still to be written (expected to fail) |
+| `npm run lint` | oxlint |
 
-## Expanding the Oxlint configuration
+`npm test` and `npm run build` are separate gates. The test transform is more
+permissive than the production bundler, so a green suite does not guarantee a
+successful build — run both.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Editing content
+
+All site copy lives in **`src/content.js`**. It is the only file to touch for
+text changes; the pages read from it and nothing else writes to it.
+
+`npm run test:todo` lists the claims the site currently makes that the content
+doesn't yet back up — mostly project write-ups that need real links and stacks.
+
+## Layout
+
+```
+src/
+  content.js       all site copy — edit here
+  motion.js        shared easing + entrance gestures
+  index.css        design tokens (@theme) and the .label utility
+  components/      Orb (WebGL), PageShell, Cursor, ErrorBoundary
+  pages/           one file per route
+```
+
+## Notes
+
+- The orb is a WebGL shader (three.js via @react-three/fiber). It is ~237KB
+  gzipped and loads only on devices that can render it; everything else gets
+  the CSS `StaticOrb` fallback.
+- Motion respects `prefers-reduced-motion` throughout.
